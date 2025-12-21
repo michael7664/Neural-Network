@@ -1,0 +1,39 @@
+vars: "x,t"
+
+domain:
+  bounds:
+    x: [-1.0, 1.0]
+    t: [0.0, 1.0]
+
+constants:
+  nu: 0.01
+
+conditions:
+  ic:
+    - sampler: {type: initial, var: t, value: 0.0}
+      target:  {type: expr, expr: "-sin(pi*x)"}
+
+  bc:
+    - sampler: {type: boundary, var: x, value: -1.0}
+      target:  {type: zeros}
+    - sampler: {type: boundary, var: x, value:  1.0}
+      target:  {type: zeros}
+
+pinn:
+  steps: 10000
+  lr: 0.001
+  n_f: 20000
+  cond_batch: 256
+  print_every: 200
+  w_f: 1.0
+  w_c: 20.0
+  lbfgs_steps: 500
+  lbfgs_lr: 1.0
+
+output:
+  residual_points: 20000
+  grid:
+    x: 201
+    t: 101
+    npy: "u_pinn.npy"
+    png: "u_pinn.png"
